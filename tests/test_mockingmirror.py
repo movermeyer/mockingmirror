@@ -10,9 +10,13 @@ class TestMirror(unittest.TestCase):
         self.mirror.an_attribute = 42
         self.assertEqual(self.mock.an_attribute, 42)
 
-    def test_missing_attribute_throws(self):
+    def test_getting_missing_attribute_on_mock_throws(self):
         with self.assertRaises(AttributeError):
             self.mock.a_missing_attribute
+
+    def test_setting_missing_attribute_on_mock_throws(self):
+        with self.assertRaises(AttributeError):
+            self.mock.a_missing_attribute = 42
 
     def test_getting_attribute_creates_mock(self):
         self.mirror.an_attribute
