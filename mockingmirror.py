@@ -1,5 +1,7 @@
 import mock
 
+__version__ = "0.dev0"
+
 class ReturnValueNotSet(object):
     __slots__=[]
     def __str__(self):
