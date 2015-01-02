@@ -1,15 +1,19 @@
 language: python
 env:
-- TOXENV=py26
+- TOXENV=packaging
+- TOXENV=pep8
+- TOXENV=py3pep8
 - TOXENV=py27
 - TOXENV=py32
 - TOXENV=py33
 - TOXENV=py34
-- TOXENV=docs
-- TOXENV=pep8
+- TOXENV=pypy
 
 install:
-- pip install tox
+- pip install tox coveralls
 
 script:
 - tox
+
+after_success:
+  - coveralls
