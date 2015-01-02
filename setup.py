@@ -35,4 +35,5 @@ setup(
     ],
     keywords="mock",
     install_requires=["mock"],
+    py_modules=["mockingmirror"],
 )

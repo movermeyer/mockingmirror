@@ -1,6 +1,7 @@
 import unittest
 import mockingmirror
 
+
 class TestMirror(unittest.TestCase):
 
     def setUp(self):
@@ -49,3 +50,12 @@ class TestMirror(unittest.TestCase):
 
         self.mirror.a_method()[:] = "from_return_value"
         self.assertEqual(self.mock.a_method(), "from_return_value")
+
+    def test_calling_mock_without_return_value(self):
+        self.mirror.a_method()
+        self.assertIs(
+            self.mock.a_method(), mockingmirror.RETURN_VALUE_NOT_SET
+        )
+        self.assertEqual(
+            repr(self.mock.a_method()), "RETURN_VALUE_NOT_SET"
+        )
