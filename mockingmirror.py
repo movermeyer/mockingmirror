@@ -41,8 +41,16 @@ def mirrored(setup):
     @wraps(setup)
     def wrapped_setup(self):
         self.mirror, self.mock = mirror()
-        setup(self, self.mirror, self.mock)
+        return setup(self, self.mirror, self.mock)
     return wrapped_setup
+
+
+class NonCallableMock(mock.NonCallableMock):
+    def __getattr__(self, name):
+        try:
+            return super(NonCallableMock, self).__getattr__(name)
+        except AttributeError:
+            raise AttributeError("%r has no attribute %r" % (self, name))
 
 
 class Mirror(object):
@@ -61,6 +69,10 @@ class Mirror(object):
     def __init__(self, name=None, parent=None, mirrors=None):
         if mirrors is None:
             mirrors = []
+        if parent is not None and parent._name is not None:
+            path = parent._name + "." + name
+        else:
+            path = name
         # Add a temporary mock to capture all of the following calls to setattr
         self._mock = mock.NonCallableMock()
         self._spec = set()
@@ -69,8 +81,9 @@ class Mirror(object):
         self._mirrors = mirrors
         self._mirrors.append(self)
         self._is_callable = False
+        self._path = path
         # Replace our mock and spec objects.
-        self._mock = mock.NonCallableMock()
+        self._mock = NonCallableMock(name=path)
         self._mock.mock_add_spec([], True)
         self._spec = set()
         if name is not None:
@@ -99,7 +112,7 @@ class Mirror(object):
         side effects for the mocked method."""
         if not self._is_callable:
             self._is_callable = True
-            self._mock = mock.Mock()
+            self._mock = mock.Mock(name=self._path)
             self._mock.add_spec([], True)
             setattr(self._parent._mock, self._name, self._mock)
         return Invocation(self, self._mock)
