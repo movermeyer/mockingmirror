@@ -59,3 +59,14 @@ class TestMirror(unittest.TestCase):
         self.assertEqual(
             repr(self.mock.a_method()), "RETURN_VALUE_NOT_SET"
         )
+
+    def test_mock_name(self):
+        self.mirror.an_object.a_child_object
+        self.assertRegexpMatches(
+            repr(self.mock.an_object),
+            "^<NonCallableMock name='an_object' id='.*'>$"
+        )
+        self.assertRegexpMatches(
+            repr(self.mock.an_object.a_child_object),
+            "^<NonCallableMock name='an_object.a_child_object' id='.*'>$"
+        )
