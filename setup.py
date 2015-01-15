@@ -5,24 +5,29 @@ import os
 here = os.path.abspath(os.path.dirname(__file__))
 
 
-def read_file(*names):
-    file_path = os.path.join(here, *names)
+def read_file(path):
+    """Read a UTF-8 file from the package. Takes a list of strings to join to
+    make the path"""
+    file_path = os.path.join(here, *path)
     with open(file_path, encoding="utf-8") as f:
         return f.read()
 
 
-def exec_file(*names):
-    code = read_file(*names)
+def exec_file(path, name):
+    """Extract a constant from a python file by looking for a line defining
+    the constant and executing it."""
     result = {}
-    exec(code, result)
-    return result
+    code = read_file(path)
+    lines = [line for line in code.split('\n') if line.startswith(name)]
+    exec("\n".join(lines), result)
+    return result[name]
 
 
 setup(
     name="mockingmirror",
-    version=exec_file("mockingmirror.py")["__version__"],
+    version=exec_file(("mockingmirror.py",), "__version__"),
     description="Make strict mocks using a mirror",
-    long_description=read_file("README.rst"),
+    long_description=read_file(("README.rst",)),
     url="https://github.com/NegativeMjark/mockingmirror",
     author="Mark Haines",
     author_email="mjark@negativecurvature.net",
