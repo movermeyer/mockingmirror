@@ -15,7 +15,7 @@
 import mock
 from functools import wraps
 
-__version__ = "0.1"
+__version__ = "0.2"
 
 
 def mirror():
