@@ -2,7 +2,7 @@
 Mocking Mirror
 ==============
 
-* .. image:: https://pypip.in/version/mockingmirror/badge.svg?branch=master
+* .. image:: https://img.shields.io/pypi/v/mockingmirror.svg?branch=master
     :target: https://pypi.python.org/pypi/mockingmirror/
     :alt: Latest Version
 
